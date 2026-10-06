@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鹈鹕骑自行车 · SVG动画</title>
+<style>
+  :root { color-scheme: light; --ink:#18334a; --sky:#bfeeff; --grass:#7bd38c; }
+  * { box-sizing:border-box }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink);
+    background:linear-gradient(#e8f9ff,#f6fff1); }
+  .card { width:min(100%,1000px); overflow:hidden; border:1px solid #d5edf2; border-radius:24px;
+    background:#fff; box-shadow:0 18px 55px #38758a22; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px 22px 10px; }
+  h1 { margin:0; font-size:clamp(20px,4vw,30px); letter-spacing:.02em }
+  .tag { padding:7px 12px; border-radius:999px; background:#e7f8ec; color:#28794a; font-size:13px; white-space:nowrap }
+  svg { display:block; width:100%; height:auto; background:var(--sky) }
+  .controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:14px 20px 19px; }
+  button { border:0; border-radius:12px; padding:10px 16px; background:#176f83; color:white; font:inherit; font-weight:700; cursor:pointer }
+  button:hover { background:#10596a }
+  label { display:flex; align-items:center; gap:9px; font-size:14px }
+  input { accent-color:#176f83; width:140px }
+  .hint { margin-left:auto; color:#67818d; font-size:13px }
+  .wheel { transform-box:fill-box; transform-origin:center; animation:spin 1.8s linear infinite }
+  .crank { transform-box:fill-box; transform-origin:center; animation:spin 1.15s linear infinite }
+  .pedal-leg { transform-box:fill-box; transform-origin:top center; animation:pedal 1.15s ease-in-out infinite alternate }
+  .body-bob { transform-box:fill-box; transform-origin:center; animation:bob 1.15s ease-in-out infinite }
+  .cloud { animation:drift 24s linear infinite }
+  .cloud.slow { animation-duration:34s; animation-delay:-12s }
+  .paused * { animation-play-state:paused !important }
+  @keyframes spin { to { transform:rotate(360deg) } }
+  @keyframes pedal { from { transform:rotate(-24deg) } to { transform:rotate(24deg) } }
+  @keyframes bob { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-4px) } }
+  @keyframes drift { from { transform:translateX(-190px) } to { transform:translateX(920px) } }
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:0.001ms !important; animation-iteration-count:1 !important } }
+</style>
+</head>
+<body>
+<main class="card" id="scene">
+  <header><h1>鹈鹕骑自行车</h1><span class="tag">纯 SVG · 离线动画</span></header>
+  <svg viewBox="0 0 900 500" role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="title">一只鹈鹕骑着自行车在草地上前进</title>
+    <desc id="desc">卡通鹈鹕戴着头盔骑自行车，车轮和脚踏持续转动，云朵缓缓飘过。</desc>
+    <defs>
+      <linearGradient id="beak" x2="0" y2="1"><stop stop-color="#ffcb58"/><stop offset="1" stop-color="#f39135"/></linearGradient>
+      <linearGradient id="feather" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#d9e8ef"/></linearGradient>
+      <linearGradient id="road" x2="0" y2="1"><stop stop-color="#8b9eaa"/><stop offset="1" stop-color="#718792"/></linearGradient>
+    </defs>
+    <!-- 天空、云和远山 -->
+    <rect width="900" height="500" fill="#bfeeff"/>
+    <circle cx="760" cy="88" r="43" fill="#ffe77c"/>
+    <g class="cloud" fill="#fff" opacity=".88"><ellipse cx="70" cy="92" rx="42" ry="17"/><circle cx="55" cy="82" r="20"/><circle cx="82" cy="77" r="25"/><circle cx="104" cy="89" r="17"/></g>
+    <g class="cloud slow" fill="#fff" opacity=".72"><ellipse cx="330" cy="60" rx="36" ry="14"/><circle cx="315" cy="51" r="17"/><circle cx="338" cy="47" r="21"/><circle cx="358" cy="58" r="14"/></g>
+    <path d="M0 302 138 187l116 115 134-147 164 147 128-105 220 105v95H0Z" fill="#93d3cb"/>
+    <path d="M0 330 168 237l143 93 142-111 141 111 135-81 171 81v80H0Z" fill="#74bf9f"/>
+    <path d="M0 350Q230 322 450 350t450 0v90H0Z" fill="#87d98e"/>
+    <path d="M0 395H900v105H0Z" fill="url(#road)"/>
+    <path d="M0 399H900" stroke="#d7e1e3" stroke-width="7"/>
+    <path d="M30 453h130m70 0h130m70 0h130m70 0h130m70 0h100" stroke="#f9f1c2" stroke-width="7" stroke-linecap="round" opacity=".9"/>
+    <!-- 草丛 -->
+    <g fill="#3b9f61"><path d="m73 397 8-24 8 24m7 0 13-31 3 31m623 0 9-28 7 28m14 0 12-22 5 22m26 0 10-34 7 34"/></g>
+    <!-- 自行车：车架 -->
+    <g stroke="#e34d60" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M300 355 402 355 460 257 300 355 354 263"/>
+      <path d="M402 355 354 263 460 257 514 355 402 355"/>
+      <path d="M354 263 323 263"/>
+    </g>
+    <path d="M343 255h39" stroke="#273f55" stroke-width="9" stroke-linecap="round"/>
+    <path d="M453 249 470 245" stroke="#273f55" stroke-width="8" stroke-linecap="round"/>
+    <!-- 车轮 -->
+    <g fill="none" stroke="#263b4a">
+      <circle cx="300" cy="355" r="67" stroke-width="8"/><circle cx="514" cy="355" r="67" stroke-width="8"/>
+      <g class="wheel" stroke-width="2.5" opacity=".8">
+        <circle cx="300" cy="355" r="59" stroke="#f8fbfc"/><path d="M300 296v118m-59-59h118m-42-42 84 84m0-84-84 84m-42-84-84 84m0-84 84 84" stroke="#f8fbfc"/>
+      </g>
+      <g class="wheel" stroke-width="2.5" opacity=".8">
+        <circle cx="514" cy="355" r="59" stroke="#f8fbfc"/><path d="M514 296v118m-59-59h118m-42-42 84 84m0-84-84 84m-42-84-84 84m0-84 84 84" stroke="#f8fbfc"/>
+      </g>
+      <circle cx="300" cy="355" r="7" fill="#f9c653" stroke-width="3"/><circle cx="514" cy="355" r="7" fill="#f9c653" stroke-width="3"/>
+    </g>
+    <!-- 鹈鹕身体与骑行动作 -->
+    <g class="body-bob">
+      <path d="M375 234q-15-48 24-67 41-18 68 12l28 53q-40 34-91 20-19-5-29-18Z" fill="url(#feather)" stroke="#344f60" stroke-width="4"/>
+      <path d="M392 222q30-17 67 2l17 21q-40 25-78 2Z" fill="#91c7d4"/>
+      <!-- 脖子、头 -->
+      <path d="M450 202q3-45 31-60l19 12q-22 23-13 62" fill="url(#feather)" stroke="#344f60" stroke-width="4" stroke-linejoin="round"/>
+      <ellipse cx="490" cy="132" rx="39" ry="34" fill="url(#feather)" stroke="#344f60" stroke-width="4"/>
+      <circle cx="503" cy="125" r="5" fill="#18334a"/><circle cx="504" cy="123" r="1.6" fill="#fff"/>
+      <!-- 大嘴和喉囊 -->
+      <path d="M516 139q74-10 91 10-23 26-74 26-14-9-17-36Z" fill="url(#beak)" stroke="#a85b2b" stroke-width="3"/>
+      <path d="M527 157q38 8 70-2-9 25-51 31-13-7-19-29Z" fill="#f17f64" stroke="#a85b2b" stroke-width="2"/>
+      <path d="M520 140q42-9 77 3" fill="none" stroke="#fff0b0" stroke-width="3"/>
+      <!-- 头盔 -->
+      <path d="M458 124q8-39 45-39 29 0 40 29l-11 7q-25-14-62-3Z" fill="#ef5964" stroke="#963d51" stroke-width="4"/>
+      <path d="M459 121q37-15 76-2" fill="none" stroke="#ffc2a9" stroke-width="4" stroke-linecap="round"/>
+      <path d="M473 117v-10m20 7V96m20 14v-9" stroke="#963d51" stroke-width="3"/>
+      <!-- 翅膀搭在车把 -->
+      <path d="M420 202q26-13 43 5l-24 22q-19-2-27-13Z" fill="#d6e7ed" stroke="#344f60" stroke-width="3"/>
+      <path d="m438 215 35 30" stroke="#344f60" stroke-width="5" stroke-linecap="round"/>
+      <!-- 两条踩踏的腿 -->
+      <path d="M400 248q-16 18-6 38l12 20" fill="none" stroke="#f4a23c" stroke-width="9" stroke-linecap="round"/>
+      <g class="crank"><circle cx="402" cy="355" r="18" fill="none" stroke="#f7c451" stroke-width="5"/><path d="M402 355l15-12m-15 12-15 12" stroke="#f7c451" stroke-width="5" stroke-linecap="round"/><path d="m413 343 11 2m-34 31-10 4" stroke="#263b4a" stroke-width="5" stroke-linecap="round"/></g>
+      <g class="pedal-leg"><path d="M420 251q13 20-7 39l-11 52" fill="none" stroke="#f4a23c" stroke-width="9" stroke-linecap="round"/><path d="m394 344 21 4" stroke="#283e50" stroke-width="7" stroke-linecap="round"/></g>
+    </g>
+    <!-- 小鸟尾羽 -->
+    <path d="m376 233-25-8 15 19-25 4 34 8" fill="#fff" stroke="#344f60" stroke-width="3" stroke-linejoin="round"/>
+    <text x="28" y="42" fill="#1d6070" font-size="17" font-weight="700" opacity=".75">一路向前！</text>
+  </svg>
+  <div class="controls">
+    <button id="toggle" type="button" aria-pressed="false">暂停动画</button>
+    <label for="speed">动画速度 <input id="speed" type="range" min="0.5" max="2" value="1" step="0.1"><span id="speedText">1.0×</span></label>
+    <span class="hint">拖动滑块调整骑行速度</span>
+  </div>
+</main>
+<script>
+  const scene = document.getElementById('scene');
+  const toggle = document.getElementById('toggle');
+  const speed = document.getElementById('speed');
+  const speedText = document.getElementById('speedText');
+  toggle.addEventListener('click', () => {
+    const paused = scene.classList.toggle('paused');
+    toggle.textContent = paused ? '继续动画' : '暂停动画';
+    toggle.setAttribute('aria-pressed', String(paused));
+  });
+  speed.addEventListener('input', () => {
+    const value = Number(speed.value);
+    scene.style.setProperty('--speed', value);
+    scene.querySelectorAll('svg *').forEach(el => {
+      const duration = getComputedStyle(el).animationDuration;
+      if (duration && duration !== '0s') {
+        const base = Number(el.dataset.baseDuration || parseFloat(duration));
+        el.dataset.baseDuration = base;
+        el.style.animationDuration = `${base / value}s`;
+      }
+    });
+    speedText.textContent = `${value.toFixed(1)}×`;
+  });
+</script>
+</body>
+</html>
