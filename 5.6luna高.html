@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>鹈鹕骑自行车 SVG 动画</title>
+
+  <style>
+    :root {
+      --speed: 1;
+      --ink: #243040;
+      --orange: #f28b32;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #d9f5ff, #fff2d5);
+    }
+
+    .card {
+      width: min(980px, 100%);
+      padding: clamp(14px, 3vw, 28px);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 28px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 24px 70px rgba(38, 83, 108, .18);
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      margin: 0 0 5px;
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      letter-spacing: .04em;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      color: #657284;
+      font-size: .95rem;
+    }
+
+    .scene {
+      overflow: hidden;
+      border-radius: 20px;
+      background: #9fe6f5;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      margin-top: 15px;
+    }
+
+    button,
+    select {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 15px;
+      color: white;
+      background: #315c76;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover,
+    select:hover {
+      background: #24465b;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #526273;
+      font-size: .92rem;
+    }
+
+    #speed {
+      accent-color: var(--orange);
+    }
+
+    .rider {
+      animation:
+        ride-bob calc(1.2s / var(--speed))
+        ease-in-out infinite;
+      transform-box: fill-box;
+      transform-origin: center bottom;
+    }
+
+    .wheel {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation:
+        spin calc(.82s / var(--speed))
+        linear infinite;
+    }
+
+    .pedal-arm {
+      transform-box: fill-box;
+      transform-origin: 50% 50%;
+      animation:
+        spin calc(1.25s / var(--speed))
+        linear infinite reverse;
+    }
+
+    .leg-a {
+      transform-box: fill-box;
+      transform-origin: 0 0;
+      animation:
+        leg-a calc(1.25s / var(--speed))
+        ease-in-out infinite;
+    }
+
+    .leg-b {
+      transform-box: fill-box;
+      transform-origin: 0 0;
+      animation:
+        leg-b calc(1.25s / var(--speed))
+        ease-in-out infinite;
+    }
+
+    .wing {
+      transform-box: fill-box;
+      transform-origin: 20% 75%;
+      animation:
+        wing-flap calc(1.2s / var(--speed))
+        ease-in-out infinite;
+    }
+
+    .head {
+      transform-box: fill-box;
+      transform-origin: 55% 85%;
+      animation:
+        head-bob calc(1.2s / var(--speed))
+        ease-in-out infinite;
+    }
+
+    .cloud {
+      animation: cloud-drift 24s linear infinite;
+    }
+
+    .cloud.slow {
+      animation-duration: 38s;
+      animation-delay: -13s;
+    }
+
+    .road-mark {
+      animation:
+        road-move calc(2.6s / var(--speed))
+        linear infinite;
+    }
+
+    .water-line {
+      animation:
+        water-move calc(5s / var(--speed))
+        linear infinite;
+    }
+
+    .paused * {
+      animation-play-state: paused !important;
+    }
+
+    @keyframes ride-bob {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes leg-a {
+      0%, 100% {
+        transform: rotate(18deg);
+      }
+
+      50% {
+        transform: rotate(-32deg);
+      }
+    }
+
+    @keyframes leg-b {
+      0%, 100% {
+        transform: rotate(-32deg);
+      }
+
+      50% {
+        transform: rotate(18deg);
+      }
+    }
+
+    @keyframes wing-flap {
+      0%, 100% {
+        transform: rotate(2deg);
+      }
+
+      50% {
+        transform: rotate(-13deg);
+      }
+    }
+
+    @keyframes head-bob {
+      0%, 100% {
+        transform: rotate(1deg);
+      }
+
+      50% {
+        transform: rotate(-3deg);
+      }
+    }
+
+    @keyframes cloud-drift {
+      from {
+        transform: translateX(-55px);
+      }
+
+      to {
+        transform: translateX(55px);
+      }
+    }
+
+    @keyframes road-move {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-180px);
+      }
+    }
+
+    @keyframes water-move {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>鹈鹕骑自行车</h1>
+
+    <p class="hint">
+      纯 SVG 绘制 · 车轮、脚蹬、翅膀、云朵和道路都会动起来
+    </p>
+
+    <div class="scene">
+      <svg
+        id="pelicanScene"
+        viewBox="0 0 900 520"
+        role="img"
+        aria-label="一只鹈鹕骑自行车经过海边"
+      >
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7ed8f0"/>
+            <stop offset="1" stop-color="#d8f8f4"/>
+          </linearGradient>
+
+          <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#55c7d4"/>
+            <stop offset="1" stop-color="#238fae"/>
+          </linearGradient>
+
+          <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#526273"/>
+            <stop offset="1" stop-color="#293745"/>
+          </linearGradient>
+
+          <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+        </defs>
+
+        <!-- 天空 -->
+        <rect width="900" height="520" fill="url(#sky)"/>
+
+        <!-- 太阳 -->
+        <circle
+          cx="770"
+          cy="92"
+          r="48"
+          fill="#ffe08a"
+          opacity=".95"
+        />
+
+        <circle
+          cx="770"
+          cy="92"
+          r="69"
+          fill="#ffe08a"
+          opacity=".18"
+        />
+
+        <!-- 云朵 -->
+        <g class="cloud" fill="#fff" opacity=".78">
+          <ellipse cx="115" cy="100" rx="58" ry="22"/>
+          <ellipse cx="77" cy="102" rx="28" ry="22"/>
+          <ellipse cx="143" cy="88" rx="32" ry="29"/>
+          <ellipse cx="182" cy="104" rx="34" ry="19"/>
+        </g>
+
+        <g class="cloud slow" fill="#fff" opacity=".52">
+          <ellipse cx="650" cy="165" rx="68" ry="19"/>
+          <ellipse cx="610" cy="160" rx="30" ry="23"/>
+          <ellipse cx="670" cy="147" rx="35" ry="29"/>
+        </g>
+
+        <!-- 海面 -->
+        <path
+          d="M0 278
+             Q100 257 205 278
+             T410 278
+             T615 278
+             T820 278
+             T1025 278
+             V390 H0Z"
+          fill="url(#sea)"
+        />
+
+        <!-- 海面波纹 -->
+        <g
+          class="water-line"
+          fill="none"
+          stroke="#b9f1e8"
+          stroke-width="4"
+          stroke-linecap="round"
+          opacity=".72"
+        >
+          <path d="M10 305 q32 -13 64 0 t64 0 t64 0"/>
+          <path d="M440 326 q32 -13 64 0 t64 0 t64 0"/>
+          <path d="M700 292 q32 -13 64 0 t64 0 t64 0"/>
+          <path d="M170 352 q32 -13 64 0 t64 0 t64 0"/>
+        </g>
+
+        <!-- 沙滩 -->
+        <path
+          d="M0 355
+             Q180 333 360 355
+             T720 355
+             T1080 355
+             V430 H0Z"
+          fill="#f6d38c"
+        />
+
+        <path
+          d="M0 371
+             Q160 349 320 371
+             T640 371
+             T960 371"
+          fill="none"
+          stroke="#ffe8b8"
+          stroke-width="10"
+          opacity=".8"
+        />
+
+        <!-- 道路 -->
+        <path
+          d="M0 402
+             Q230 383 450 402
+             T900 402
+             V520 H0Z"
+          fill="url(#road)"
+        />
+
+        <!-- 阴影 -->
+        <ellipse
+          cx="450"
+          cy="459"
+          rx="225"
+          ry="23"
+          fill="#15232c"
+          opacity=".28"
+          filter="url(#softShadow)"
+        />
+
+        <!-- 道路虚线 -->
+        <g class="road-mark" fill="#f8dfa3" opacity=".8">
+          <rect x="-30" y="458" width="120" height="9" rx="4"/>
+          <rect x="150" y="458" width="120" height="9" rx="4"/>
+          <rect x="330" y="458" width="120" height="9" rx="4"/>
+          <rect x="510" y="458" width="120" height="9" rx="4"/>
+          <rect x="690" y="458" width="120" height="9" rx="4"/>
+          <rect x="870" y="458" width="120" height="9" rx="4"/>
+        </g>
+
+        <!-- 鹈鹕和自行车整体 -->
+        <g class="rider">
+
+          <!-- 自行车 -->
+          <g
+            fill="none"
+            stroke="#263a48"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <!-- 车轮 -->
+            <g class="wheel" stroke="#243744" stroke-width="8">
+              <circle
+                cx="284"
+                cy="401"
+                r="58"
+                fill="#d8f4f4"
+                fill-opacity=".3"
+              />
+
+              <circle
+                cx="616"
+                cy="401"
+                r="58"
+                fill="#d8f4f4"
+                fill-opacity=".3"
+              />
+            </g>
+
+            <!-- 车轮辐条 -->
+            <g stroke="#6c93a0" stroke-width="2.5" opacity=".9">
+              <path d="M284 343v116"/>
+              <path d="M226 401h116"/>
+              <path d="M243 360l82 82"/>
+              <path d="M325 360l-82 82"/>
+
+              <path d="M616 343v116"/>
+              <path d="M558 401h116"/>
+              <path d="M575 360l82 82"/>
+              <path d="M657 360l-82 82"/>
+            </g>
+
+            <!-- 车架 -->
+            <path
+              d="M284 401
+                 L372 335
+                 L452 401
+                 L284 401
+                 L410 401
+                 L372 335"
+              stroke="#e16642"
+              stroke-width="8"
+            />
+
+            <!-- 前叉与车把 -->
+            <path
+              d="M452 401
+                 L527 325
+                 L616 401
+                 M527 325 l-10 -28
+                 M507 297 h34"
+              stroke="#e16642"
+              stroke-width="8"
+            />
+
+            <!-- 座位 -->
+            <path
+              d="M372 335
+                 L351 303
+                 h-33"
+              stroke="#263a48"
+              stroke-width="8"
+            />
+
+            <!-- 中轴 -->
+            <path
+              d="M448 400
+                 l24 24
+                 M455 393
+                 l19 0"
+              stroke="#263a48"
+              stroke-width="7"
+            />
+          </g>
+
+          <!-- 脚蹬 -->
+          <g
+            class="pedal-arm"
+            fill="none"
+            stroke="#e16642"
+            stroke-width="6"
+            stroke-linecap="round"
+          >
+            <circle
+              cx="452"
+              cy="401"
+              r="14"
+              fill="#ffd377"
+              stroke="#263a48"
+              stroke-width="4"
+            />
+
+            <path d="M452 401 l-25 -18 h-22"/>
+            <path d="M452 401 l25 18 h22"/>
+          </g>
+
+          <!-- 鹈鹕身体 -->
+          <g>
+            <ellipse
+              cx="470"
+              cy="269"
+              rx="84"
+              ry="100"
+              fill="#f9f6ed"
+              stroke="#263a48"
+              stroke-width="6"
+            />
+
+            <path
+              d="M412 294
+                 Q454 339 509 313
+                 Q527 301 537 274
+                 Q525 356 466 366
+                 Q421 356 403 316Z"
+              fill="#d9e3e2"
+              stroke="#263a48"
+              stroke-width="5"
+            />
+
+            <path
+              d="M418 252
+                 Q466 222 523 252"
+              fill="none"
+              stroke="#c8d5d4"
+              stroke-width="12"
+              stroke-linecap="round"
+            />
+
+            <!-- 翅膀 -->
+            <g class="wing">
+              <path
+                d="M420 248
+                   Q355 256 342 306
+                   Q364 340 429 314
+                   Q457 292 451 256Z"
+                fill="#e9efeb"
+                stroke="#263a48"
+                stroke-width="6"
+              />
+
+              <path
+                d="M408 275
+                   Q378 295 360 320
+                   M424 278
+                   Q401 312 385 329
+                   M438 277
+                   Q429 311 417 328"
+                fill="none"
+                stroke="#aebfbe"
+                stroke-width="5"
+              />
+            </g>
+
+            <!-- 鹈鹕头部 -->
+            <g class="head">
+              <ellipse
+                cx="450"
+                cy="142"
+                rx="60"
+                ry="69"
+                fill="#faf8f0"
+                stroke="#263a48"
+                stroke-width="6"
+              />
+
+              <!-- 长嘴 -->
+              <path
+                d="M394 155
+                   Q350 156 300 181
+                   Q350 209 418 187
+                   Q445 174 450 154Z"
+                fill="#f4a04e"
+                stroke="#263a48"
+                stroke-width="6"
+              />
+
+              <path
+                d="M301 181
+                   Q349 184 415 177
+                   Q381 205 326 196Z"
+                fill="#e77e39"
+                opacity=".78"
+              />
+
+              <!-- 眼睛 -->
+              <circle
+                cx="477"
+                cy="126"
+                r="10"
+                fill="#263a48"
+              />
+
+              <circle
+                cx="481"
+                cy="122"
+                r="3.5"
+                fill="#fff"
+              />
+
+              <!-- 头顶羽毛 -->
+              <path
+                d="M485 101
+                   Q511 79 530 101"
+                fill="none"
+                stroke="#d48b4c"
+                stroke-width="9"
+                stroke-linecap="round"
+              />
+
+              <!-- 嘴部线条 -->
+              <path
+                d="M487 158
+                   Q470 171 450 160"
+                fill="none"
+                stroke="#d48b4c"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+            </g>
+
+            <!-- 腿 -->
+            <g
+              fill="none"
+              stroke="#d87832"
+              stroke-width="9"
+              stroke-linecap="round"
+            >
+              <path
+                class="leg-a"
+                d="M458 334 L438 377"
+              />
+
+              <path
+                class="leg-b"
+                d="M493 335 L508 378"
+              />
+            </g>
+
+            <!-- 脚趾 -->
+            <g
+              fill="none"
+              stroke="#d87832"
+              stroke-width="7"
+              stroke-linecap="round"
+            >
+              <path
+                d="M438 377
+                   l-20 8
+                   M438 377
+                   l-3 11
+                   M438 377
+                   l13 7"
+              />
+
+              <path
+                d="M508 378
+                   l-15 8
+                   M508 378
+                   l2 11
+                   M508 378
+                   l17 2"
+              />
+            </g>
+
+            <!-- 翅膀前端和车把 -->
+            <path
+              d="M413 244
+                 Q451 280 507 303"
+              fill="none"
+              stroke="#263a48"
+              stroke-width="7"
+              stroke-linecap="round"
+            />
+
+            <path
+              d="M503 302
+                 q16 8 27 0"
+              fill="none"
+              stroke="#263a48"
+              stroke-width="7"
+              stroke-linecap="round"
+            />
+          </g>
+        </g>
+
+        <!-- 前景植物 -->
+        <g
+          fill="none"
+          stroke="#3b9471"
+          stroke-width="5"
+          stroke-linecap="round"
+        >
+          <path
+            d="M75 402
+               q-3 -30 12 -46
+               M85 382
+               q-21 -19 -28 -5
+               M88 371
+               q21 -24 28 -11"
+          />
+
+          <path
+            d="M820 405
+               q-3 -33 12 -51
+               M831 383
+               q-21 -18 -29 -5
+               M834 374
+               q20 -25 28 -11"
+          />
+        </g>
+      </svg>
+    </div>
+
+    <!-- 控制区域 -->
+    <div class="controls" aria-label="动画控制">
+      <button id="toggle" type="button">
+        暂停动画
+      </button>
+
+      <label>
+        速度
+
+        <select id="speed" aria-label="选择动画速度">
+          <option value="0.65">慢速</option>
+          <option value="1" selected>正常</option>
+          <option value="1.5">快速</option>
+          <option value="2.2">超快</option>
+        </select>
+      </label>
+
+      <span
+        id="status"
+        aria-live="polite"
+        style="color:#657284;font-size:.9rem"
+      >
+        正在骑行中
+      </span>
+    </div>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const card = document.querySelector(".card");
+    const toggle = document.querySelector("#toggle");
+    const speed = document.querySelector("#speed");
+    const status = document.querySelector("#status");
+
+    toggle.addEventListener("click", () => {
+      const paused = card.classList.toggle("paused");
+
+      toggle.textContent = paused
+        ? "继续动画"
+        : "暂停动画";
+
+      status.textContent = paused
+        ? "动画已暂停"
+        : "正在骑行中";
+    });
+
+    speed.addEventListener("change", () => {
+      root.style.setProperty("--speed", speed.value);
+    });
+  </script>
+</body>
+</html>
