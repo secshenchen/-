@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>鹈鹕的海边骑行</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f6f0e4;color:#254b50;font-family:system-ui,"Microsoft YaHei",sans-serif}
+main{width:min(960px,96vw);padding:24px 0}
+h1{margin:0 0 6px;font-size:clamp(24px,5vw,38px)}
+p{margin:0 0 22px;color:#647b7c}
+.scene{overflow:hidden;border:1px solid #d3e2dd;border-radius:24px;background:#dff3ef;box-shadow:0 20px 60px #244b5015}
+svg{display:block;width:100%;height:auto}
+.controls{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;padding:20px}
+button{border:0;border-radius:30px;background:#285f63;color:white;padding:12px 26px;font:inherit;cursor:pointer}
+label{display:flex;gap:10px;align-items:center}input{width:130px;accent-color:#285f63}
+.small{text-align:center;font-size:13px;margin:0}
+</style>
+</head>
+<body>
+<main>
+<h1>鹈鹕的海边骑行</h1>
+<p>海风正好，慢慢向前。</p>
+<div class="scene">
+<svg viewBox="0 0 900 570" role="img" aria-labelledby="title desc">
+<title id="title">鹈鹕骑自行车的二维动画</title>
+<desc id="desc">一只戴绿色帽子、系橙色围巾的白色鹈鹕，沿着海岸踩着蓝绿色自行车前进。</desc>
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#d8eeed"/><stop offset="1" stop-color="#f5f8e6"/></linearGradient>
+ <g id="cloud" fill="#fffdf4"><ellipse rx="48" ry="14"/><ellipse cx="-17" cy="-11" rx="23" ry="20"/><ellipse cx="16" cy="-17" rx="28" ry="25"/></g>
+ <g id="wheel" stroke="#294f55" fill="none">
+  <circle r="77" stroke-width="10"/><circle r="68" stroke="#fcf3d9" stroke-width="4"/>
+  <g stroke="#86aaa6" stroke-width="2">
+   <path d="M-65 0H65M0-65V65M-46-46L46 46M-46 46L46-46M-25-60L25 60M-60-25L60 25M-60 25L60-25M-25 60L25-60"/>
+  </g><circle r="9" fill="#e8b56f" stroke-width="4"/>
+ </g>
+ <pattern id="roadMarks" width="180" height="20" patternUnits="userSpaceOnUse"><path d="M20 10H100" stroke="#fff6df" stroke-width="5" stroke-linecap="round"/></pattern>
+</defs>
+<path fill="url(#sky)" d="M0 0H900V570H0Z"/>
+<circle cx="730" cy="105" r="49" fill="#f8d787"/>
+<g opacity=".85"><use id="cloud1" href="#cloud" transform="translate(160 100)"/><use id="cloud2" href="#cloud" transform="translate(560 65) scale(.7)"/></g>
+<path d="M0 292Q130 250 240 285T480 285T720 285T960 285V410H0Z" fill="#91c6be"/>
+<path d="M0 325Q170 310 340 329T680 327T1020 330V422H0Z" fill="#add9cd"/>
+<g fill="none" stroke="#e2f3df" stroke-width="3" stroke-linecap="round"><path d="M70 350h100m100 17h120m210-27h130m45 40h80"/></g>
+<path d="M0 400Q210 366 410 408T900 395V570H0Z" fill="#e8d5a6"/>
+<path d="M0 443H900V550H0Z" fill="#b8c5b6"/>
+<path d="M0 449H900" stroke="#f7ebcb" stroke-width="7"/>
+<rect id="marks" x="-180" y="510" width="1260" height="20" fill="url(#roadMarks)"/>
+<ellipse cx="455" cy="487" rx="221" ry="14" fill="#456963" opacity=".15"/>
+<g id="rider">
+ <!-- 远侧腿 -->
+ <path id="legBack" d="M433 315L471 360L470 417" fill="none" stroke="#c58443" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+ <g transform="translate(310 405)"><use id="rear" href="#wheel"/></g>
+ <g transform="translate(610 405)"><use id="front" href="#wheel"/></g>
+ <!-- 自行车车架 -->
+ <g fill="none" stroke="#28797c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M310 405L397 300L453 405ZM397 300H563L453 405M548 266L610 405M397 300L385 270"/>
+ </g>
+ <path d="M365 272H408" stroke="#314b50" stroke-width="13" stroke-linecap="round"/>
+ <path d="M548 270L540 245H575" fill="none" stroke="#314b50" stroke-width="8" stroke-linecap="round"/>
+ <path d="M568 245H583" stroke="#a67448" stroke-width="11" stroke-linecap="round"/>
+ <path d="M310 405L453 405" stroke="#426361" stroke-width="4"/>
+ <circle cx="453" cy="405" r="21" fill="#f5e8c8" stroke="#365b5d" stroke-width="5"/>
+ <path id="crank" stroke="#365b5d" stroke-width="6" stroke-linecap="round"/>
+ <path id="pedalBack" stroke="#314b50" stroke-width="7" stroke-linecap="round"/>
+ <!-- 尾羽、身体与弯曲长颈 -->
+ <path d="M371 265L315 235L329 270L308 269L364 300Z" fill="#fffdf3" stroke="#365b5d" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M358 265C374 235 425 227 463 249C478 259 486 261 494 247C502 234 489 215 485 196C476 164 485 133 508 128C537 121 555 147 543 168C537 180 522 179 518 190C513 207 547 239 537 269C526 308 482 323 429 320C377 321 345 300 358 265Z" fill="#fffdf3" stroke="#365b5d" stroke-width="4"/>
+ <!-- 喉囊和长嘴 -->
+ <path d="M533 162L664 174Q633 226 558 198Q542 188 533 162Z" fill="#eab76a" stroke="#365b5d" stroke-width="4"/>
+ <path d="M535 151L682 172Q690 176 678 181L536 173Z" fill="#f5cf7f" stroke="#365b5d" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M551 179L648 180" stroke="#c68e49" stroke-width="2"/>
+ <circle cx="520" cy="151" r="5" fill="#263f45"/><circle cx="521" cy="149" r="1.5" fill="white"/>
+ <!-- 小帽子 -->
+ <path d="M489 133Q488 98 516 101Q539 102 541 131Z" fill="#4f8980" stroke="#365b5d" stroke-width="4"/>
+ <path d="M482 134Q517 126 553 134" fill="none" stroke="#365b5d" stroke-width="7" stroke-linecap="round"/>
+ <path d="M493 120L536 119" stroke="#efd398" stroke-width="7"/>
+ <!-- 随风摆动的围巾 -->
+ <path id="scarf" d="M500 213Q465 202 436 217L450 230Q475 216 507 227Z" fill="#d97850"/>
+ <path d="M491 207L516 215L520 229L494 221Z" fill="#e88a59" stroke="#b56243" stroke-width="2"/>
+ <!-- 翅膀扶车把 -->
+ <path d="M388 261Q425 254 462 273Q508 285 558 246Q568 242 570 250Q530 300 479 301Q418 303 393 281" fill="#e6ece2" stroke="#365b5d" stroke-width="4" stroke-linecap="round"/>
+ <path d="M411 274Q439 288 467 287" fill="none" stroke="#adc4bb" stroke-width="3" stroke-linecap="round"/>
+ <!-- 近侧腿与水平踏板 -->
+ <path id="legFront" fill="none" stroke="#e6a34f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+ <path id="footFront" fill="none" stroke="#e6a34f" stroke-width="10" stroke-linecap="round"/>
+ <path id="pedalFront" stroke="#314b50" stroke-width="7" stroke-linecap="round"/>
+</g>
+<g fill="#72987c"><path d="M63 442l-9-26 18 19 3-31 8 32 18-14-9 20ZM802 440l-10-22 19 15 4-32 8 32 17-15-8 22Z"/></g>
+</svg>
+</div>
+<div class="controls">
+<button id="toggle" type="button">暂停动画</button>
+<label for="speed">骑行速度 <input id="speed" type="range" min="0.3" max="2.5" step="0.1" value="1"><output id="value">1.0×</output></label>
+</div>
+<p class="small">纯 SVG 绘图 · 完全离线 · 支持手机和电脑</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+let speed=1,phase=0,last=0;
+$('toggle').textContent=playing?'暂停动画':'播放动画';
+$('toggle').onclick=()=>{
+ playing=!playing;
+ $('toggle').textContent=playing?'暂停动画':'播放动画';
+};
+$('speed').oninput=e=>{
+ speed=Number(e.target.value);
+ $('value').textContent=speed.toFixed(1)+'×';
+};
+function draw(t){
+ const a=t*2*Math.PI;
+ const x=453+29*Math.cos(a),y=405+29*Math.sin(a);
+ const bx=906-x,by=810-y;
+ $('rear').setAttribute('transform',`rotate(${t*180})`);
+ $('front').setAttribute('transform',`rotate(${t*180})`);
+ $('crank').setAttribute('d',`M${bx} ${by}L${x} ${y}`);
+ // 膝盖随踏板移动，双脚始终连接踏板。
+ $('legFront').setAttribute('d',`M425 315Q${404+12*Math.cos(a)} ${353+8*Math.sin(a)} ${x} ${y-7}`);
+ $('legBack').setAttribute('d',`M433 315Q${482-12*Math.cos(a)} ${350-8*Math.sin(a)} ${bx} ${by-7}`);
+ $('footFront').setAttribute('d',`M${x-7} ${y-6}L${x+14} ${y-6}`);
+ $('pedalFront').setAttribute('d',`M${x-12} ${y+2}h27`);
+ $('pedalBack').setAttribute('d',`M${bx-12} ${by+2}h27`);
+ $('rider').setAttribute('transform',`translate(0 ${Math.sin(a*2)*1.5})`);
+ $('scarf').setAttribute('d',`M500 213Q465 ${202+Math.sin(a)*7} 436 ${217+Math.sin(a+1)*9}L450 ${230+Math.sin(a+1)*7}Q475 216 507 227Z`);
+ $('marks').setAttribute('transform',`translate(${-t*242%180} 0)`);
+ $('cloud1').setAttribute('transform',`translate(${((160-t*9+110)%1120+1120)%1120-110} 100)`);
+ $('cloud2').setAttribute('transform',`translate(${((560-t*6+110)%1120+1120)%1120-110} 65) scale(.7)`);
+}
+function frame(now){
+ const dt=last?Math.min((now-last)/1000,.05):0;
+ last=now;
+ if(playing)phase+=dt*speed;
+ draw(phase);
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
