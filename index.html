@@ -326,6 +326,54 @@
         }
     }
 
+
+    .start-button {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    body.viewing-test { padding: 0; }
+
+    .test-view:not([hidden]) {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--bg);
+    }
+
+    .test-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px 16px;
+        padding: 8px clamp(12px, 3vw, 28px);
+        border-bottom: 1px solid #d2d2d7;
+        background: white;
+    }
+
+    .test-toolbar a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        color: var(--blue);
+        font-size: 14px;
+        font-weight: 650;
+        text-decoration: none;
+    }
+
+    .test-toolbar a:hover { background: #eef5ff; }
+    .test-toolbar a:focus-visible { outline: 2px solid var(--blue); }
+    .test-toolbar a[hidden] { display: none; }
+    .test-steps { display: flex; gap: 4px; }
+    #test-title { font-size: 15px; margin: 0; }
+    #test-title small { color: var(--sub); font-weight: 500; }
+    #test-frame { flex: 1; min-height: 0; width: 100%; border: 0; background: white; }
+
 </style>
 </head>
 
@@ -704,12 +752,7 @@
 
     <div class="start-area">
 
-        <button
-            class="start-button"
-            onclick="location.href='5.5高.html'"
-        >
-            从 TEST 01 开始测试 →
-        </button>
+        <a id="start-test" class="start-button" href="5.5高.html">从 TEST 01 开始测试 →</a>
 
     </div>
 
@@ -722,6 +765,102 @@
     </footer>
 
 </div>
+
+
+<section id="test-view" class="test-view" aria-labelledby="test-title" hidden>
+    <nav class="test-toolbar" aria-label="连续测试">
+        <a href="#">← 返回目录</a>
+        <h2 id="test-title" tabindex="-1" aria-live="polite">
+            <span id="test-model"></span> <small id="test-position"></small>
+        </h2>
+        <div class="test-steps">
+            <a id="test-prev">← 上一个</a>
+            <a id="test-next">下一个 →</a>
+        </div>
+    </nav>
+</section>
+
+<script>
+    (() => {
+        const directory = document.querySelector(".container");
+        const view = document.getElementById("test-view");
+        const title = document.getElementById("test-title");
+        const model = document.getElementById("test-model");
+        const position = document.getElementById("test-position");
+        const prev = document.getElementById("test-prev");
+        const next = document.getElementById("test-next");
+        const start = document.getElementById("start-test");
+        const route = index => "#test-" + String(index + 1).padStart(2, "0");
+        const tests = Array.from(directory.querySelectorAll("a.card[href]"), (card, index) => {
+            const test = {
+                card,
+                url: card.href,
+                label: card.querySelector(".model").textContent.trim(),
+                level: card.querySelector(".level").textContent.trim(),
+            };
+            card.href = route(index);
+            return test;
+        });
+        let active = -1;
+        let frame = null;
+        let returnFocus = start;
+
+        directory.addEventListener("click", event => {
+            const link = event.target.closest("a");
+            if (link === start || tests.some(test => test.card === link)) returnFocus = link;
+        });
+        start.href = route(0);
+
+        function render() {
+            const match = /^#test-(\d+)$/.exec(location.hash);
+            const index = match ? Number(match[1]) - 1 : -1;
+            const test = tests[index];
+            const opening = active === -1;
+
+            if (!test) {
+                directory.hidden = false;
+                view.hidden = true;
+                document.body.classList.remove("viewing-test");
+                document.title = "ChatGPT 模型测试";
+                if (!opening) {
+                    frame.remove();
+                    frame = null;
+                    returnFocus.focus();
+                }
+                active = -1;
+                return;
+            }
+            if (active === index) return;
+
+            active = index;
+            directory.hidden = true;
+            view.hidden = false;
+            document.body.classList.add("viewing-test");
+            model.textContent = test.label + " · " + test.level;
+            position.textContent = (index + 1) + " / " + tests.length;
+            document.title = test.label + " · ChatGPT 模型测试";
+            prev.hidden = index === 0;
+            prev.href = index > 0 ? route(index - 1) : "#";
+
+            const last = index === tests.length - 1;
+            next.href = last ? "#" : route(index + 1);
+            next.textContent = last ? "完成并返回目录" : "下一个 →";
+
+            const preview = document.createElement("iframe");
+            preview.id = "test-frame";
+            preview.title = test.label + " " + test.level + " 测试页面";
+            preview.src = test.url;
+            if (frame) frame.replaceWith(preview);
+            else view.append(preview);
+            frame = preview;
+
+            if (opening || (index === 0 && document.activeElement === document.body)) title.focus();
+        }
+
+        window.addEventListener("hashchange", render);
+        render();
+    })();
+</script>
 
 </body>
 </html>
